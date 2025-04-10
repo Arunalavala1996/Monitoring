@@ -1,4 +1,4 @@
-root@LOG-STAG-APP-01:/etc/prometheus# cat alerts.yml
+
 groups:
   - name: redis-alerts
     rules:

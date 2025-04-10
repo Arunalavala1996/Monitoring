@@ -22,7 +22,7 @@ docker pull $PROMTAIL_IMAGE
 # Create the Promtail configuration file
 echo "Creating Promtail configuration file at $PROMTAIL_CONFIG_PATH..."
 
-cat > $PROMTAIL_CONFIG_PATH <<EOF
+cat > etc/promtail/promtail.yaml <<EOF
 server:
   http_listen_port: 3101
   grpc_listen_port: 9095
@@ -55,7 +55,7 @@ EOF
 
 echo "Promtail configuration file created successfully."
 
-# Run Promtail container as a standalone container
+# Run the Promtail container as a standalone container
 echo "Starting Promtail container..."
 
 sudo docker run -d \
@@ -64,7 +64,7 @@ sudo docker run -d \
   -v /var/log:/var/log \
   -v /var/lib/docker/containers:/var/lib/docker/containers \
   -v /tmp:/tmp \
-  -v $PROMTAIL_CONFIG_PATH:/etc/promtail/promtail.yaml \
+  -v /etc/promtail/promtail.yaml:/etc/promtail/promtail.yaml \
   $PROMTAIL_IMAGE \
   -config.file=/etc/promtail/promtail.yaml
 

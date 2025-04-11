@@ -1,0 +1,125 @@
+
+groups:
+  - name: redis-alerts
+    rules:
+      - alert: RedisMasterServiceDown
+        expr: time() - container_last_seen{container_label_com_docker_swarm_service_name="cache-srv_redis-master", job="cadvisor"} > 60
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Redis Master service (cache-srv_redis-master) is down"
+          description: "The Redis master service (cache-srv_redis-master) has been down for more than 1 minute. Please investigate."
+
+      - alert: RedisSlaveServiceDown
+        expr: time() - container_last_seen{container_label_com_docker_swarm_service_name="cache-srv_redis-slave-1", job="cadvisor"} > 60
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Redis Slave service (cache-srv_redis-slave-1) is down"
+          description: "The Redis slave service (cache-srv_redis-slave-1) has been down for more than 1 minute. Please investigate."
+
+  - name: Service-alerts
+    rules:
+      - alert: FeesServiceDown
+        expr: time() - container_last_seen{container_label_com_docker_swarm_service_name="fees-service",job="cadvisor"} > 60
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Fees service (fees-service) is down"
+          description: "Fees service (fees) has been down for more than 1 minute. Please investigate."
+
+      - alert: UsersServiceDown
+        expr: time() - container_last_seen{container_label_com_docker_swarm_service_name="users-service",job="cadvisor"} > 60
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Users service (users-service) is down"
+          description: "Users service (users) has been down for more than 1 minute. Please investigate."
+
+      - alert: FineServiceDown
+        expr: time() - container_last_seen{container_label_com_docker_swarm_service_name="fines-service",job="cadvisor"} > 60
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Fines service (fines-service) is down"
+          description: "Fines service (fines) has been down for more than 1 minute. Please investigate."
+
+      - alert: GeneralServiceDown
+        expr: time() - container_last_seen{container_label_com_docker_swarm_service_name="general-service",job="cadvisor"} > 60
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "General service (general-service) is down"
+          description: "General service (general-service) has been down for more than 1 minute. Please investigate."
+
+      - alert: ServicesServiceDown
+        expr: time() - container_last_seen{container_label_com_docker_swarm_service_name="services-service",job="cadvisor"} > 60
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Services service (services-service) is down"
+          description: "Services service (services-service) has been down for more than 1 minute. Please investigate."
+
+      - alert: CmsServiceServiceDown
+        expr: time() - container_last_seen{container_label_com_docker_swarm_service_name="cms-service-service",job="cadvisor"} > 60
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "CMS service service (cms-service-service) is down"
+          description: "CMS service service (cms-service-service) has been down for more than 1 minute. Please investigate."
+
+      - alert: WebsiteServiceDown
+        expr: time() - container_last_seen{container_label_com_docker_swarm_service_name="website-service",job="cadvisor"} > 60
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Website service (website-service) is down"
+          description: "Website service (website-service) has been down for more than 1 minute. Please investigate."
+
+      - alert: DrupalCmsWebDown
+        expr: time() - container_last_seen{container_label_com_docker_swarm_service_name="drupal-cms_web",job="cadvisor"} > 60
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Drupal CMS web service (drupal-cms_web) is down"
+          description: "Drupal CMS web service (drupal-cms_web) has been down for more than 1 minute. Please investigate."
+
+      - alert: PushServiceDown
+        expr: time() - container_last_seen{container_label_com_docker_swarm_service_name="push-service", job="cadvisor"} > 60
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Push service (push-service) is down"
+          description: "Push service (push-service) has been down for more than 1 minute. Please investigate."
+
+      - alert: VehiclesServiceDown
+        expr: time() - container_last_seen{container_label_com_docker_swarm_service_name="vehicles-service", job="cadvisor"} > 60
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Vehicles service (vehicles-service) is down"
+          description: "Vehicles service (vehicles-service) has been down for more than 1 minute. Please investigate."
+
+  - name: disk_usage_alerts
+    rules:
+      - alert: RootDiskUsageHigh
+        expr: (node_filesystem_size_bytes{device="/dev/mapper/ubuntu_vg-ubuntu_root", instance="manager"} - node_filesystem_avail_bytes{device="/dev/mapper/ubuntu_vg-ubuntu_root", instance="manager"}) / node_filesystem_size_bytes{device="/dev/mapper/ubuntu_vg-ubuntu_root", instance="manager"} * 100 > 70
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Root Filesystem Usage is High"
+          description: "The root filesystem (/) usage on node {{ $labels.instance }} is above 70%. Current usage: {{ $value }}%."
+
